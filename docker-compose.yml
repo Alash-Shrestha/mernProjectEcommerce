@@ -1,0 +1,37 @@
+version: "3"
+
+services:
+  frontend:
+    build: ./frontend
+    container_name: react-app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - mern-networks
+
+  backend:
+    build: .
+    container_name: node-app
+    ports:
+      - "5000:5000"
+    restart: always
+    depends_on:
+      - database
+    networks:
+      - mern-networks
+
+  database:
+    image: mongo:4.0.5-xenial
+    container_name: mongo-db
+    ports:
+      - "27017:27017"
+    volumes:
+      - /home/sd/mongobkup:/data/db
+    networks:
+      - mern-networks
+
+networks:
+  mern-networks:
+    driver: bridge
